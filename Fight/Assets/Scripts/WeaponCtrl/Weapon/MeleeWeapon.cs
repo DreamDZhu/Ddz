@@ -9,7 +9,7 @@ using UnityEngine;
 public class MeleeWeapon : Weapon {
 
     [Tooltip("配置此武器的所有HitBox")]
-    public List<HitBox> hitBoxes;
+    private List<HitBox> hitBoxes;
 
     private Dictionary<HitBox, List<GameObject>> hitObjctCache; //被攻击的单位集合
 
@@ -18,8 +18,18 @@ public class MeleeWeapon : Weapon {
 
     protected virtual void Start()
     {
-        
+        hitBoxes = new List<HitBox>();
         hitObjctCache = new Dictionary<HitBox, List<GameObject>>();
+
+        //将所有hitbox加入List
+        foreach (Transform hitbox in transform)
+        {
+            if (hitbox.gameObject.name == "HitBox")
+            {
+                hitBoxes.Add(hitbox.GetComponent<HitBox>());
+            }
+        }
+
         //把所有的攻击碰撞体，加入当期武器
         if (hitBoxes.Count>0)
         {
@@ -32,6 +42,35 @@ public class MeleeWeapon : Weapon {
         else
         {
             this.enabled = false;
+        }
+    }
+
+    private void ClearHitObjCache()
+    {
+        for (int i = 0; i < hitBoxes.Count; i++)
+        {
+            if (hitObjctCache != null)
+            {
+                hitObjctCache[hitBoxes[i]].Clear();
+            }
+            //激活攻击碰撞
+            var hitCollider = hitBoxes[i];
+            hitCollider.trigger.enabled = false;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        ClearHitObjCache();
+        ResetHitBox();
+    }
+
+   private void ResetHitBox()
+    {
+        foreach (var item in hitBoxes)
+        {
+            item.gameObject.SetActive(false);
+            item.gameObject.SetActive(true);
         }
     }
 

@@ -66,6 +66,7 @@ public class AttackActionState : StateMachineBehaviour {
         if (attack)
         {
             attack.SetActiveAttack(value);
+            attack.SetActiveSpeed(value);
         }
     }
 

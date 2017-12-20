@@ -47,6 +47,7 @@ public class HitBox : MonoBehaviour {
                 
                 //攻击目标
                 weapon.OnHit(this, other);
+                Debug.Log(other.name);
             }
         }
     }

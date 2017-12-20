@@ -10,6 +10,14 @@ public class CameraCtrl : MonoBehaviour {
     private Transform _mTransform;
     private Transform _mPlayerTransform;
 
+
+
+
+    [SerializeField]
+    private float x; //鼠标X
+    [SerializeField]
+    private float y;//鼠标Y
+
     private void Awake()
     {
         
@@ -28,6 +36,15 @@ public class CameraCtrl : MonoBehaviour {
             _mTransform.position = _mPlayerTransform.position;
         }
       
+    }
+
+    void FirstCamera()
+    {
+        x = Input.GetAxis("Mouse X");
+        y = Input.GetAxis("Mouse Y");
+        Vector3 camAng = Vector3.zero;
+        camAng.y += x;
+        _mTransform.eulerAngles = camAng;
     }
 
 }

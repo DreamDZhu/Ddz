@@ -13,8 +13,12 @@ using UnityEngine;
 public class Character : MonoBehaviour,IDamageable {
 
 
-    public Weapon currentWeapon; //当前装备的武器
-    public Transform weaponSocket;
+    public GameObject weaponPos;
+
+    protected Weapon currentWeapon; //当前装备的武器
+
+   
+    protected Dictionary<int, Weapon> weaponDict = new Dictionary<int, Weapon>();
 
     public float health = 0f; //血量
     public float stamin = 0f;
@@ -75,10 +79,10 @@ public class Character : MonoBehaviour,IDamageable {
 
     protected virtual void Start()
     {
-        if (currentWeapon!=null)
-        {
-            currentWeapon.owner = GetComponent<Character>();
-        }
+        //if (currentWeapon!=null)
+        //{
+        //    currentWeapon.owner = GetComponent<Character>();
+        //}
      
         _mTransform = GetComponent<Transform>();
         anim = GetComponent<Animator>();
@@ -91,17 +95,15 @@ public class Character : MonoBehaviour,IDamageable {
         }
 
 
-        
-        rbody.drag = 0;
-        rbody.angularDrag = 0;
-        rbody.mass = 100;
+
+
     }
 
     protected virtual void FixedUpdate()
     {
+        UpdateInput();
         if (!isDead && canControl)
         {
-            UpdateInput();
             UpdateControl();
         }
        
@@ -151,6 +153,22 @@ public class Character : MonoBehaviour,IDamageable {
        
         
     
+    }
+
+    /// <summary>
+    /// 设置攻击的速度
+    /// </summary>
+    /// <param name="speed"></param>
+    public virtual void SetActiveSpeed(bool active)
+    {
+        if (active)
+        {
+            canControl = false;
+        }
+        else
+        {
+            canControl = true;
+        }
     }
 
     /// <summary>
